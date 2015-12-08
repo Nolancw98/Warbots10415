@@ -8,28 +8,34 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by Nolan on 11/14/2015.
  */
-public class Treads2MotorsExperimental extends OpMode {
+public class TeleOp2Motors extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
     DcMotor lift;
     DcMotor feeder;
+    DcMotor tilt;
     Servo dunker;
-    Servo wing;
+    Servo leftwing;
+    Servo rightwing;
     Servo stopper;
+
 
     @Override
     public void init() {
         //Motors
-        motorRight = hardwareMap.dcMotor.get("backRight");
-        motorLeft = hardwareMap.dcMotor.get("backLeft");
+        motorRight = hardwareMap.dcMotor.get("motorRight");
+        motorLeft = hardwareMap.dcMotor.get("motorLeft");
         lift = hardwareMap.dcMotor.get("lift");
         feeder = hardwareMap.dcMotor.get("feeder");
+        tilt = hardwareMap.dcMotor.get("tilt");
         //lift.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         //Servos
         dunker = hardwareMap.servo.get("dunker");
-        wing = hardwareMap.servo.get("wing");
+        leftwing = hardwareMap.servo.get("leftwing");
+        rightwing = hardwareMap.servo.get("rightwing");
         dunker.setPosition(1);
-        wing.setPosition(0);
+        leftwing.setPosition(.5);
+        rightwing.setPosition(.5);
         //stopper = hardwareMap.servo.get("Stop");
         //Setting Direction
         motorRight.setDirection(DcMotor.Direction.REVERSE);
@@ -53,12 +59,21 @@ public class Treads2MotorsExperimental extends OpMode {
         //left = (float) scaleInput(left);
         if(gamepad2.left_bumper)
         {
-            wing.setPosition(1);
+            leftwing.setPosition(.3);
         }
         else
         {
-            wing.setPosition(0);
+            leftwing.setPosition(.7);
         }
+        if(gamepad2.right_bumper)
+        {
+            rightwing.setPosition(.7);
+        }
+        else
+        {
+            rightwing.setPosition(.3);
+        }
+
         if (gamepad1.a)
         {
             // greater = closer
@@ -78,8 +93,20 @@ public class Treads2MotorsExperimental extends OpMode {
         {
             lift.setPower(.95 / 3);
         }
+        if(gamepad2.a)
+        {
+            tilt.setPower(.1);
+        }
+        else if(gamepad2.y)
+        {
+            tilt.setPower(-.1);
+        }
+        else
+        {
+            tilt.setPower(0);
+        }
 
-        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad2.right_bumper){
+        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad2.b){
             motorLeft.setPower(0);
             motorRight.setPower(0);
             stopper.setPosition(1);
